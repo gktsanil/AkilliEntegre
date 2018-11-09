@@ -10,11 +10,16 @@ using System.Windows.Forms;
 
 namespace AkilliEntegre
 {
-    public partial class Form1 : Form
+    public partial class HBForm : Form
     {
-        public Form1()
+        public HBForm()
         {
             InitializeComponent();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
