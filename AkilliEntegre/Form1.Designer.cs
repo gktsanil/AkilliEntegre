@@ -160,7 +160,11 @@
             this.Controls.Add(this.prBtn);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "HBForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "HepsiBurada.com";
+            this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.HBForm_MouseDown);
+            this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.HBForm_MouseMove);
+            this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.HBForm_MouseUp);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
 
