@@ -16,7 +16,7 @@ namespace AkilliEntegre
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new HBForm());
+            Application.Run(new LoginForm());
         }
     }
 }
