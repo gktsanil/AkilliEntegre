@@ -12,10 +12,10 @@ namespace AkilliEntegre.Model
     class MySQLConnect
     {
 
-        private static string Host = "46.45.139.109";
-        private static string User = "akilliph_wecart";
-        private static string DBname = "akilliph_wecart";
-        private static string Password = "@i_rURz?+pbP";
+        private static string Host = "";
+        private static string User = "";
+        private static string DBname = "";
+        private static string Password = "";
         private static string Port = "5432";
         public MySqlDataAdapter baglayici = new MySqlDataAdapter();
         public MySqlCommand komut = new MySqlCommand();
