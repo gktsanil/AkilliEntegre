@@ -16,5 +16,18 @@ namespace AkilliEntegre
         {
             InitializeComponent();
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Form hb = new HBForm();
+            Form lg = new LoginForm();
+            this.ShowForm(hb, lg);
+        }
+
+        private void ShowForm(Form newForm, Form oldForm)
+        {
+            newForm.Show();
+            oldForm.Hide();
+        }
     }
 }
