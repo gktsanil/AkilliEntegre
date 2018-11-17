@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using MySql.Data;
 using MySql.Data.MySqlClient;
 
@@ -49,6 +50,22 @@ namespace AkilliEntegre.Model
             myCommand.Connection.Open();
             myCommand.ExecuteNonQuery();
             myConnection.Close();
+        }
+
+        public void FillDatatable(String query, DataGridView view)
+        {
+            this.komut.CommandText = query;
+            this.komut.Connection = this.baglan;
+
+            this.baglayici.SelectCommand = this.komut;
+            this.baglan.Open();
+            this.baglayici.Fill(this.table);
+            this.baglan.Close();
+            view.DataSource = null;
+            view.Refresh();
+            view.DataSource = this.table;
+            this.baglan.Close();
+
         }
     }
 }

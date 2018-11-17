@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using AkilliEntegre.Model;
 
 namespace AkilliEntegre
 {
@@ -18,6 +19,7 @@ namespace AkilliEntegre
         public HBForm()
         {
             InitializeComponent();
+
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -29,6 +31,7 @@ namespace AkilliEntegre
         {
             mouseDown = true;
             lastLocation = e.Location;
+
         }
 
         private void HBForm_MouseMove(object sender, MouseEventArgs e)

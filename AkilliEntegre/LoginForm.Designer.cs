@@ -34,8 +34,8 @@
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.textBox2 = new System.Windows.Forms.TextBox();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.logoPB = new System.Windows.Forms.PictureBox();
+            ((System.ComponentModel.ISupportInitialize)(this.logoPB)).BeginInit();
             this.SuspendLayout();
             // 
             // button1
@@ -94,15 +94,15 @@
             this.textBox2.Size = new System.Drawing.Size(237, 20);
             this.textBox2.TabIndex = 6;
             // 
-            // pictureBox1
+            // logoPB
             // 
-            this.pictureBox1.BackgroundImage = global::AkilliEntegre.Properties.Resources.cba82d3b4758b4ad5360f733083eb69a_icon;
-            this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pictureBox1.Location = new System.Drawing.Point(86, 23);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(125, 125);
-            this.pictureBox1.TabIndex = 4;
-            this.pictureBox1.TabStop = false;
+            this.logoPB.BackgroundImage = global::AkilliEntegre.Properties.Resources.cba82d3b4758b4ad5360f733083eb69a_icon;
+            this.logoPB.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.logoPB.Location = new System.Drawing.Point(86, 23);
+            this.logoPB.Name = "logoPB";
+            this.logoPB.Size = new System.Drawing.Size(125, 125);
+            this.logoPB.TabIndex = 4;
+            this.logoPB.TabStop = false;
             // 
             // LoginForm
             // 
@@ -111,7 +111,7 @@
             this.ClientSize = new System.Drawing.Size(310, 410);
             this.Controls.Add(this.textBox2);
             this.Controls.Add(this.textBox1);
-            this.Controls.Add(this.pictureBox1);
+            this.Controls.Add(this.logoPB);
             this.Controls.Add(this.linkLabel1);
             this.Controls.Add(this.checkBox1);
             this.Controls.Add(this.button2);
@@ -120,7 +120,7 @@
             this.Name = "LoginForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "LoginForm";
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.logoPB)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -132,7 +132,7 @@
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.LinkLabel linkLabel1;
-        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.PictureBox logoPB;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.TextBox textBox2;
     }
