@@ -46,7 +46,7 @@ namespace AkilliEntegre
 
         private void metroTile2_Click(object sender, EventArgs e)
         {
-            exp.ImportExcell(metroGrid2);
+            //exp.ImportExcell(metroGrid2);
         }
     }
 }

@@ -13,14 +13,26 @@ namespace AkilliEntegre.Model
 {
     class HBAPi
     {
+        //Real APi
+  //      $merchantid = "1ecc8c0a-df6d-4f5f-8463-e6ea8ec6673d";
+		//$username = "akıllıphone_dev";
+		//$password = "zrUN6tk5!";
 
-        private String userName = "akilliphone_dev";
-        private String password = "Ak12345!";
+        private String userName = Properties.Settings.Default.APiUser.ToString();//"akilliphone_dev";
+        private String password = Properties.Settings.Default.APiPass.ToString();//"Ak12345!";
         //String merchantId = "1ecc8c0a-df6d-4f5f-8463-e6ea8ec6673d";
-        private String merchantId = "b23af4c1-395a-4a82-b6fd-07eea0dd51b2";
-        private String listingHost = "https://listing-external-sit.hepsiburada.com/";
+        private String merchantId = Properties.Settings.Default.APiKey.ToString();//"b23af4c1-395a-4a82-b6fd-07eea0dd51b2";
+        private String listingHost = Properties.Settings.Default.APiUrl.ToString(); //"https://listing-external-sit.hepsiburada.com/";
         public List<Array> listingsList;
         public DataGridView table;
+
+        public HBAPi(String user, String pass, String merchantId, String host)
+        {
+            this.userName = user;
+            this.password = pass;
+            this.merchantId = merchantId;
+            this.listingHost = host;
+        }
 
         private String CreateUpdatePost()
         {
@@ -167,17 +179,17 @@ namespace AkilliEntegre.Model
         private void btnHb_Click(object sender, EventArgs e)
         {
             //this.UrunListeGetir();
-            this.UrunGuncelle(this.userName, this.password, this.merchantId, this.strXml);
+            this.UrunGuncelle(this.strXml);
         }
-
-        IRestResponse UrunListesiGetir(String username, String password, String merchantId)
+        
+        IRestResponse UrunListesiGetir()
         {
-            var client = new RestClient("https://listing-external-sit.hepsiburada.com/listings/merchantid/" + merchantId);
+            var client = new RestClient("https://listing-external-sit.hepsiburada.com/listings/merchantid/" + this.merchantId);
 
-            String svcCredentials = Convert.ToBase64String(ASCIIEncoding.ASCII.GetBytes(username + ":" + password));
+            String svcCredentials = Convert.ToBase64String(ASCIIEncoding.ASCII.GetBytes(this.userName + ":" + this.password));
 
             var request = new RestRequest(Method.GET);
-            request.AddHeader("merchantid", merchantId);
+            request.AddHeader("merchantid", this.merchantId);
             request.AddHeader("content-type", "application/xml");
             request.AddHeader("Authorization", "Basic " + svcCredentials);
             IRestResponse response = client.Execute(request) as RestResponse;
@@ -188,7 +200,7 @@ namespace AkilliEntegre.Model
         public String UrunListeGetir()
         {
 
-            IRestResponse urunListe = this.UrunListesiGetir(this.userName, this.password, this.merchantId);
+            IRestResponse urunListe = this.UrunListesiGetir();
 
             if (urunListe.StatusCode == HttpStatusCode.OK)
             {
@@ -203,15 +215,15 @@ namespace AkilliEntegre.Model
             }
         }
 
-        private String UrunGuncelle(String username, String password, String merchantId, String strXml)
+        public String UrunGuncelle(String strXml)
         {
-            var uri = "https://listing-external-sit.hepsiburada.com/listings/merchantId/" + merchantId + "/inventory-uploads";
+            var uri = Properties.Settings.Default.APiUrl.ToString() + "listings/merchantId/" + merchantId + "/inventory-uploads";
 
             var client = new RestClient(uri);
             var request = new RestRequest(Method.POST);
-            string svcCredentials = Convert.ToBase64String(ASCIIEncoding.ASCII.GetBytes(username + ":" + password));
+            string svcCredentials = Convert.ToBase64String(ASCIIEncoding.ASCII.GetBytes(this.userName + ":" + this.password));
 
-            request.AddHeader("merchantid", merchantId);
+            request.AddHeader("merchantid", this.merchantId);
             request.AddHeader("Authorization", "Basic " + svcCredentials);
             request.RequestFormat = RestSharp.DataFormat.Xml;
 
@@ -226,6 +238,7 @@ namespace AkilliEntegre.Model
                 {
                     result = response.Content;
                     Console.WriteLine(result);
+                    MessageBox.Show(result);
                 }
                 else
                 {
