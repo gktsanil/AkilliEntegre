@@ -30,6 +30,10 @@ namespace AkilliEntegre
 
         List<Listing> items = new List<Listing>();
         SaveFileDialog save = new SaveFileDialog();
+        //updateStock();
+        //createXMLandListing();
+        Thread updateStockThread;
+        Thread createThread;
 
 
         private string Excel03ConString = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source={0};Extended Properties='Excel 8.0;HDR={1}'";
@@ -477,6 +481,23 @@ namespace AkilliEntegre
             }           
         }
 
+        private void loadThread()
+        {
+            try
+            {
+                updateStockThread = new Thread(new ThreadStart(updateStock));
+                createThread = new Thread(new ThreadStart(createXMLandListing));
+
+                updateStockThread.Start();
+            }
+            catch (Exception ex)
+            {
+                //MessageBox.Show(ex.Message);
+                listBox1.Items.Add(ex.Message);
+                //throw;
+            }
+        }
+
         private void HBSection_Load(object sender, EventArgs e)
         {
             Control.CheckForIllegalCrossThreadCalls = false;
@@ -578,7 +599,8 @@ namespace AkilliEntegre
                     listBox2.Items.Add(ex.Message);
                 }
             }
-            MessageBox.Show("Datalar Güncellendi");
+            //MessageBox.Show("Datalar Güncellendi");
+            listBox2.Items.Add("Datalar Güncellendi");
         }
 
         private void metroButton1_Click(object sender, EventArgs e)
@@ -708,7 +730,7 @@ namespace AkilliEntegre
         }
 
 
-        public void updateStock()
+        private void updateStock()
         {
             //mysql.FillDatatable("SELECT pa.amount AS Product_Stock,hb.stock AS HB_Stock,pa.barcode AS Product_Barcode,hb.akilli_barcode AS HB_Barcode FROM product_amount AS pa INNER JOIN hb_products AS hb WHERE hb.akilli_barcode = pa.barcode AND hb.hb_sku != '' AND hb.stock != pa.amount", metroGrid1);
             //Thread.Sleep(100);
@@ -736,33 +758,45 @@ namespace AkilliEntegre
 
             //}
 
-            progressBar1.Value = 0;
-            mysql.FillDatatable("SELECT pa.idProduct,pa.amount,pa.barcode,p.productName,p.salePrice FROM product_amount AS pa INNER JOIN product AS p ON pa.idProduct = p.id INNER JOIN hb_products AS hb ON hb.akilli_barcode = pa.barcode WHERE pa.barcode != '' AND hb.hb_sku != ''", metroGrid1);
-            Thread.Sleep(10000);
-            listBox2.Items.Add(metroGrid1.Rows.Count.ToString());
-            progressBar1.Maximum = metroGrid1.Rows.Count;
-            Console.WriteLine(metroGrid1.Rows.Count);
-            foreach (DataGridViewRow row in metroGrid1.Rows)
+            try
             {
+                progressBar1.Value = 0;
+                mysql.FillDatatable("SELECT pa.idProduct,pa.amount,pa.barcode,p.productName,p.salePrice FROM product_amount AS pa INNER JOIN product AS p ON pa.idProduct = p.id INNER JOIN hb_products AS hb ON hb.akilli_barcode = pa.barcode WHERE pa.barcode != '' AND hb.hb_sku != ''", metroGrid1);
+                //Thread.Sleep(10000);
+                listBox2.Items.Add(metroGrid1.Rows.Count.ToString());
+                progressBar1.Maximum = metroGrid1.Rows.Count;
+                Console.WriteLine(metroGrid1.Rows.Count);
+                foreach (DataGridViewRow row in metroGrid1.Rows)
+                {
 
-                try
-                {
-                    //String query = "INSERT INTO hb_products(akilli_id, akilli_barcode, akilli_name,stock,price) VALUES('" + row.Cells[0].Value.ToString() + "','" + row.Cells[2].Value.ToString() + "','" + row.Cells[3].Value.ToString() + "','" + Convert.ToInt32(row.Cells[1].Value) + "','" + Convert.ToDecimal(row.Cells[4].Value) + "')";
-                    String query = "UPDATE hb_products SET stock=" + Convert.ToDouble(row.Cells[1].Value.ToString()) + ", price='" + row.Cells[4].Value.ToString() + "' WHERE akilli_barcode='" + row.Cells[2].Value.ToString() + "'";
-                    Console.WriteLine(query);
-                    progressBar1.Value++; // Convert.ToDouble(100 / metroGrid1.Rows.Count);
-                    Thread.Sleep(10);
-                    mysql.UpdateData(query);
+                    try
+                    {
+                        //String query = "INSERT INTO hb_products(akilli_id, akilli_barcode, akilli_name,stock,price) VALUES('" + row.Cells[0].Value.ToString() + "','" + row.Cells[2].Value.ToString() + "','" + row.Cells[3].Value.ToString() + "','" + Convert.ToInt32(row.Cells[1].Value) + "','" + Convert.ToDecimal(row.Cells[4].Value) + "')";
+                        String query = "UPDATE hb_products SET stock=" + Convert.ToDouble(row.Cells[1].Value.ToString()) + ", price='" + row.Cells[4].Value.ToString() + "' WHERE akilli_barcode='" + row.Cells[2].Value.ToString() + "'";
+                        Console.WriteLine(query);
+                        progressBar1.Value++; // Convert.ToDouble(100 / metroGrid1.Rows.Count);
+                        Thread.Sleep(10);
+                        mysql.UpdateData(query);
+                    }
+                    catch (Exception ex)
+                    {
+                        //MessageBox.Show(ex.Message);
+                        listBox2.Items.Add("2" + ex.Message);
+                    }
                 }
-                catch (Exception ex)
-                {
-                    //MessageBox.Show(ex.Message);
-                    listBox2.Items.Add("2" + ex.Message);
-                }
+                listBox2.Items.Add("Datalar Güncellendi");
+                createXMLandListing();
             }
-            listBox2.Items.Add("Datalar Güncellendi");
+            catch (Exception ex)
+            {
+                //MessageBox.Show(ex.Message);
+                listBox1.Items.Add(ex.Message);
+                //throw;
+            }
 
-
+            //createXMLandListing();
+            //createThread.Start();
+            //createXMLandListing();
         }
 
         private static void MyFunction()
@@ -797,7 +831,7 @@ namespace AkilliEntegre
         {
             Properties.Settings.Default.LastUpdate = DateTime.UtcNow.ToLocalTime();
             label12.Text = Properties.Settings.Default.LastUpdate.ToString();
-            this.WindowState = FormWindowState.Minimized;
+            //this.WindowState = FormWindowState.Minimized;
 
             elementsTurnStatus(false);
             xmlCheck.Checked = false;
@@ -806,30 +840,57 @@ namespace AkilliEntegre
             timer1.Interval = Convert.ToInt32(sureNum.Value) * 3600000;
             stopUpdate.Enabled = true;
             autoUpdate.Enabled = false;
-            
-            updateStock();
-            createXMLandListing();
 
+            //startThread();
+            //MessageBox.Show("theread");
+            loadThread();
+            //updateStock();
+
+            //createThread.Start();
             //to minimize window
-
             //to hide from taskbar
             //this.Hide();
+        }
 
+        private void startThread()
+        {
+            updateStockThread.Start();
         }
 
         private void timer1_Tick(object sender, EventArgs e)
         {
+            updateStockThread = null;
+            createThread = null;
+            loadThread();
+
+            //MessageBox.Show("timer");
+            //updateStockThread.Suspend();
+            //createThread.Suspend();
+
+            //updateStockThread = null;
+            //createThread = null;
+
             Properties.Settings.Default.LastUpdate = DateTime.UtcNow.ToLocalTime();
             label12.Text = Properties.Settings.Default.LastUpdate.ToString();
-            updateStock();
 
-            createXMLandListing();
+            //updateStockThread.Resume();
+            //createThread.Start();
+
+            //updateStock();
+
+            //createXMLandListing();
         }
 
         //Oto güncelleme durdurur
         private void stopUpdate_Click(object sender, EventArgs e)
         {
             //MessageBox.Show(updateTask.Status.ToString());
+            //updateStockThread.Interrupt();
+            //createThread.Interrupt();
+
+            updateStockThread = null;
+            createThread = null;
+
             timer1.Stop();
             stopUpdate.Enabled = false;
             autoUpdate.Enabled = true;
@@ -1085,7 +1146,8 @@ namespace AkilliEntegre
             task.Start();
 
             int count = await task;
-            MessageBox.Show(count.ToString());
+            //MessageBox.Show(count.ToString());
+            listBox2.Items.Add(count.ToString());
         }
 
         private int CountChracter()
@@ -1107,7 +1169,7 @@ namespace AkilliEntegre
             {
                 Thread.Sleep(1000);
             });
-            MessageBox.Show("Hi from the UI thread! 1");
+            //MessageBox.Show("Hi from the UI thread! 1");
         }
 
         private void button16_Click_1(object sender, EventArgs e)
